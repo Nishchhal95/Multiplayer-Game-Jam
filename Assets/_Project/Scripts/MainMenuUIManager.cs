@@ -15,6 +15,10 @@ public class MainMenuUIManager : MonoBehaviour
 
     [SerializeField] private Button createRoomButton, joinRoomButton;
 
+    [SerializeField] private GameObject userInfoPanel;
+    [SerializeField] private GameObject connectionInfoPanel;
+    [SerializeField] private TMP_InputField usernameInputField;
+
     private void Start()
     {
         photonConnectionStatusImage.color = notConnectedColor;
@@ -44,6 +48,20 @@ public class MainMenuUIManager : MonoBehaviour
     public void JoinRoomClick()
     {
         PhotonNetworkManager.Instance.JoinRoom();
+    }
+
+    public void UserNameSaveClick()
+    {
+        string localPlayerUserName = usernameInputField.text;
+        localPlayerUserName = localPlayerUserName.Trim();
+        if (string.IsNullOrEmpty(localPlayerUserName))
+        {
+            Debug.Log("Username cannot be empty!");
+            return;
+        }
+        PhotonNetworkManager.Instance.SetLocalUserName(localPlayerUserName);
+        userInfoPanel.SetActive(false);
+        connectionInfoPanel.SetActive(true);
     }
 
     private void OnDisable()
