@@ -13,6 +13,8 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
 
     private const string TEST_ROOM_NAME = "Test_Room";
 
+    private string localPlayerUsername = "";
+
     public static event Action ConnectedToPhotonServer;
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
 
     private void ConnectToPhotonServer()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -49,15 +52,16 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(TEST_ROOM_NAME);
     }
 
+    public void SetLocalUserName(string username)
+    {
+        localPlayerUsername = username;
+        PhotonNetwork.NickName = localPlayerUsername;
+    }
+
     #region Photon Callbacks
 
     public override void OnConnectedToMaster()
     {
-#if UNITY_EDITOR
-        PhotonNetwork.NickName = "Editor";
-#else
-    PhotonNetwork.NickName = "Build";
-#endif
         ConnectedToPhotonServer?.Invoke();
         Debug.Log("Successfully Connected to Photon Server!");
     }
@@ -86,6 +90,11 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log($"Player {newPlayer.NickName} entered the Room");
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            //Start Game
+            PhotonNetwork.LoadLevel(1);
+        }
     }
 
     // Executes on Master Client or Server
