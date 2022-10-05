@@ -9,24 +9,27 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    public CharacterController playerController;
 
-    }
+    
 
     // Update is called once per frame
     void Update()
     {
+        
         MovementInput();
+        
     }
 
     private void MovementInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);
-
+       
         verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);
+
+        Vector3 move = transform.right * horizontalInput + transform.forward * verticalInput;
+
+
+        playerController.Move(move * speed *Time.deltaTime);
     }
 }
