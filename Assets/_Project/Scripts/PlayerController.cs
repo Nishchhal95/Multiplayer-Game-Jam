@@ -5,23 +5,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 10.0f;
+    // WASD INPUT
+    public float speed = 10.0f; 
     private float horizontalInput;
     private float verticalInput;
-
     public CharacterController playerController;
 
     
+
+
 
     // Update is called once per frame
     void Update()
     {
         
-        MovementInput();
+        MovementInput(playerController);
+        
         
     }
 
-    private void MovementInput()
+    private void MovementInput(CharacterController playerController)
     {
         horizontalInput = Input.GetAxis("Horizontal");
        
@@ -30,6 +33,16 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * horizontalInput + transform.forward * verticalInput;
 
 
-        playerController.Move(move * speed *Time.deltaTime);
+        playerController.Move(move * speed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Wall")
+        {
+            Debug.Log("Bumped the wall");
+        }
+    }
+
+    
 }
