@@ -34,12 +34,17 @@ public class FollowPlayer : MonoBehaviour
 
         
 
-        lookTarget.Rotate(Vector3.up * mouseX); //left and right watch
+        playerTransform.Rotate(Vector3.up * mouseX); //left and right watch
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+        lookTarget.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
 
         //VERTICAL ROTATION
 
-        lookTarget.transform.rotation *= Quaternion.AngleAxis(look.y * lookSpeed, Vector3.right);
+        /*lookTarget.transform.rotation *= Quaternion.AngleAxis(look.y * lookSpeed, Vector3.right);
 
         var angles = lookTarget.transform.localEulerAngles;
         angles.z = 0;
@@ -60,7 +65,7 @@ public class FollowPlayer : MonoBehaviour
         //setting player based on look target
         playerTransform.rotation = Quaternion.Euler(0, lookTarget.transform.eulerAngles.y, 0);
         //reset look target, dont know why
-        lookTarget.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
+        lookTarget.transform.localEulerAngles = new Vector3(angles.x,0,0);*/
 
     }
 }
