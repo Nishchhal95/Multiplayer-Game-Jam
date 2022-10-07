@@ -42,30 +42,7 @@ public class FollowPlayer : MonoBehaviour
         lookTarget.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
 
-        //VERTICAL ROTATION
-
-        /*lookTarget.transform.rotation *= Quaternion.AngleAxis(look.y * lookSpeed, Vector3.right);
-
-        var angles = lookTarget.transform.localEulerAngles;
-        angles.z = 0;
-
-        var angle = lookTarget.transform.localEulerAngles.x;
-
-        if (angle > 180 && angle < 340)
-        {
-            angles.x = 340;
-        }
-        else if (angle < 180 && angle > 40)
-        {
-            angles.x = 40;
-        }
-
-        lookTarget.transform.localEulerAngles = angles;
-
-        //setting player based on look target
-        playerTransform.rotation = Quaternion.Euler(0, lookTarget.transform.eulerAngles.y, 0);
-        //reset look target, dont know why
-        lookTarget.transform.localEulerAngles = new Vector3(angles.x,0,0);*/
+        
 
     }
 }
