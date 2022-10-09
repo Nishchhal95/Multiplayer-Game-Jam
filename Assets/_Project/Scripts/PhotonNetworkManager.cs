@@ -15,6 +15,8 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
 
     private string localPlayerUsername = "";
 
+    public int playerIndex = 0;
+
     public static event Action ConnectedToPhotonServer;
     private void Awake()
     {
@@ -79,6 +81,7 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Successfully Joined a room");
+        playerIndex = PhotonNetwork.CurrentRoom.PlayerCount - 1;
     }
     
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -93,7 +96,7 @@ public class PhotonNetworkManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
             //Start Game
-            PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel(2);
         }
     }
 
