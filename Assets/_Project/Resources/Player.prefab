@@ -201,6 +201,7 @@ MonoBehaviour:
   speed: 10
   playerController: {fileID: 533116206462024602}
   cameraTransform: {fileID: 0}
+  mainGameManager: {fileID: 0}
 --- !u!54 &533116206462024601
 Rigidbody:
   m_ObjectHideFlags: 0

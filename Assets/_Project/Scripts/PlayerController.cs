@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun
 {
     // WASD INPUT
     public float speed = 10.0f; 
@@ -12,12 +12,14 @@ public class PlayerController : MonoBehaviour
     private float verticalInput;
     public CharacterController playerController;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private MainGameManager mainGameManager;
 
     private PhotonView _photonView;
 
     private void Awake()
     {
         _photonView = GetComponent<PhotonView>();
+        mainGameManager = FindObjectOfType<MainGameManager>();
     }
 
     private void Start()
@@ -63,10 +65,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Wall")
+        if (!_photonView.IsMine)
         {
-            Debug.Log("Bumped the wall");
+            return;
         }
+        if (other.CompareTag("Bottle"))
+        {
+            string bottleName = other.gameObject.name;
+            _photonView.RPC("DisableBottle", RpcTarget.AllBuffered, bottleName);
+        }
+    }
+
+    [PunRPC]
+    private void DisableBottle(string bottleName)
+    {
+        mainGameManager.DisableBottle(bottleName);
     }
 
     public void SetCamera(Transform playerCameraTransform)
