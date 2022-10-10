@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviourPun
 
     private PhotonView _photonView;
 
+    private Vector3 moveDirection;
+    private Animator playerAnim;
+
     private void Awake()
     {
         _photonView = GetComponent<PhotonView>();
@@ -31,6 +34,8 @@ public class PlayerController : MonoBehaviourPun
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        playerAnim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -61,6 +66,18 @@ public class PlayerController : MonoBehaviourPun
         Vector3 move = transform.right * horizontalInput + transform.forward * verticalInput;
         
         playerController.Move(move * speed * Time.deltaTime);
+
+        moveDirection = new Vector3(0, 0, verticalInput);
+
+        if(moveDirection== Vector3.zero)
+        {
+            Idle();
+
+        }
+        else if(moveDirection != Vector3.zero)
+        {
+            Run();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,5 +102,15 @@ public class PlayerController : MonoBehaviourPun
     public void SetCamera(Transform playerCameraTransform)
     {
         cameraTransform = playerCameraTransform;
+    }
+
+    private void Idle()
+    {
+        playerAnim.SetFloat("vertical", 0);
+    }
+
+    private void Run()
+    {
+        playerAnim.SetFloat("vertical", 0.9f);
     }
 }

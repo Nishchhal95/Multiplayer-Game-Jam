@@ -37,7 +37,7 @@ public class FollowPlayer : MonoBehaviour
         playerTransform.Rotate(Vector3.up * mouseX); //left and right watch
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        xRotation = Mathf.Clamp(xRotation, -45f, 45f);
 
         lookTarget.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
