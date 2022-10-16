@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviourPun
 
     private Vector3 moveDirection;
     private Animator playerAnim;
+
+    private static int potPlayerCount = 0;
 
     private void Awake()
     {
@@ -91,6 +94,28 @@ public class PlayerController : MonoBehaviourPun
             string bottleName = other.gameObject.name;
             _photonView.RPC("DisableBottle", RpcTarget.AllBuffered, bottleName);
         }
+
+        if (other.CompareTag("Pot"))
+        {
+            _photonView.RPC("PotPlayer", RpcTarget.AllBuffered);
+        }
+        
+        if (other.CompareTag("Portal"))
+        {
+            mainGameManager.LoadFinalScene();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!_photonView.IsMine)
+        {
+            return;
+        }
+        if (other.CompareTag("Pot"))
+        {
+            _photonView.RPC("PotPlayerReduce", RpcTarget.AllBuffered);
+        }
     }
 
     [PunRPC]
@@ -112,5 +137,27 @@ public class PlayerController : MonoBehaviourPun
     private void Run()
     {
         playerAnim.SetFloat("vertical", 0.9f);
+    }
+    
+    [PunRPC]
+    private void PotPlayer()
+    {
+        potPlayerCount++;
+        if (potPlayerCount >= 2)
+        {
+            _photonView.RPC("ShowPortalVFX", RpcTarget.AllBuffered);
+        }
+    }
+    
+    [PunRPC]
+    private void PotPlayerReduce()
+    {
+        potPlayerCount--;
+    }
+    
+    [PunRPC]
+    private void ShowPortalVFX()
+    {
+        mainGameManager.ShowPortal();
     }
 }

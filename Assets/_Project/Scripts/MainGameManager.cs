@@ -17,17 +17,21 @@ public class MainGameManager : MonoBehaviour
     [SerializeField] private GameObject[] bottleGameObjects;
     private int score = 0;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject portalVFXGO;
+    [SerializeField] private GameObject level;
+
+    [SerializeField] private GameObject myGameObject;
 
     private void Start()
     {
         //Spawn Player
-        GameObject myGameObject = PhotonNetwork.Instantiate(
+        myGameObject = PhotonNetwork.Instantiate(
             "Player", 
             playerSpawnPoints[PhotonNetworkManager.Instance.playerIndex].position, 
             Quaternion.identity);
         myGameObject.GetComponent<PlayerController>().SetCamera(cameraTransform);
-        cm_FreeLook.Follow = myGameObject.transform.GetChild(1);
-        cm_FreeLook.LookAt = myGameObject.transform.GetChild(1);
+        cm_FreeLook.Follow = myGameObject.transform.GetChild(0);
+        cm_FreeLook.LookAt = myGameObject.transform.GetChild(0);
     }
 
     public void DisableBottle(string bottleName)
@@ -47,5 +51,17 @@ public class MainGameManager : MonoBehaviour
     {
         score++;
         scoreText.SetText($"Potions Collected :{score}");
+    }
+
+    public void ShowPortal()
+    {
+        portalVFXGO.SetActive(true);
+    }
+
+    public void LoadFinalScene()
+    {
+        level.SetActive(false);
+        SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
+        myGameObject.transform.position = playerSpawnPoints[PhotonNetworkManager.Instance.playerIndex].position;
     }
 }
